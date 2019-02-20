@@ -1,0 +1,125 @@
+\documentclass{article}
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+\usepackage{pgfplots}
+\usepackage{steinmetz}
+\usepackage{siunitx}
+\usepackage{subcaption}
+\pgfplotsset{compat=1.16}
+\usepackage{tabularx}
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\setlength{\tabcolsep}{0mm}
+
+\lhead{Group P}
+\chead{Computer Organization Project}
+\rhead{ISA Reference List}
+
+
+\begin{document}
+\section{Instruction Set Reference List}
+\bigskip
+
+\begin{minipage}[t]{0.3\textwidth}
+	\begin{center}
+		\medskip
+		\textbf{Formats}
+	\end{center}
+\end{minipage}
+\begin{minipage}[t]{110mm}
+	\begin{tabular}{p{12mm}p{15mm}p{10mm}p{10mm}p{10mm}p{22.5mm}R{22.5mm}}
+		& 31 & 25 & 21 & 17 & 13 & 0 \\ 
+	\end{tabular} 
+
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
+		\cline{2-6}
+		c-type: & opcode & rd & rs1 & rs2 & 0\\ 
+		\cline{2-6}
+	\end{tabular} 
+	
+	\medskip
+
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
+		\cline{2-5}
+		i-type: & opcode & rd & rs & 18-bit immediate \\
+		\cline{2-5}
+	\end{tabular}
+
+	\medskip
+	
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{65.3mm}|}
+		\cline{2-4}
+		l-type: & opcode & rd & 22-bit immediate \\
+		\cline{2-4}
+	\end{tabular}
+	
+
+\end{minipage}
+
+\bigskip\bigskip\bigskip
+
+\begin{minipage}[t]{0.3\textwidth}
+	\begin{center}
+		\textbf{Instructions}
+	\end{center}
+\end{minipage}
+\begin{minipage}[t]{110mm}
+	\begin{tabular}{p{12mm}|C{15mm}|C{75.15mm}|}
+		\cline{2-3}
+		NOP: & 000000 & 0 \\ 
+		\cline{2-3}
+	\end{tabular} 
+	
+	\medskip
+
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
+		\cline{2-5}
+		SET: & 000001 & rd & rs & 18-bit immediate \\
+		\cline{2-5}
+	\end{tabular}
+
+	\medskip
+	
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{65.3mm}|}
+		\cline{2-4}
+		LOAD: & 000010 & rd & 22-bit immediate \\
+		\cline{2-4}
+	\end{tabular}
+	
+
+\end{minipage}
+
+\pagebreak
+
+\huge\textbf{ADD}\\
+\noindent\rule{10cm}{0.4pt}
+\normalsize
+
+Format c-type: ADD, rd, rs, rs\\
+Format i-type: ADD, rd, rs, immediate\\
+Purpose: To add two 32 bit integers
+\end{document}
+
