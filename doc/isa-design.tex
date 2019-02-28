@@ -266,7 +266,7 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 + rs2 \quad or \quad rd $\leftarrow$ rs1 + immediate\par
 	\smallbreak
-	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & x & x \\ \end{tabular}
 }
 
 \bigskip\bigskip
@@ -291,7 +291,7 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 - rs2 \quad or \quad rd $\leftarrow$ rs1 - immediate\par
 	\smallbreak
-	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & x & x \\ \end{tabular}
 }
 
 \bigskip\bigskip
@@ -314,7 +314,7 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ -rs \par 
 	\smallbreak
-	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & x & - \\ \end{tabular}
 }
 
 \pagebreak
@@ -339,7 +339,7 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 $*$ rs2 \quad or \quad rd $\leftarrow$ rs1 $*$ immediate\par
 	\smallbreak
-	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & x & x \\ \end{tabular}
 }
 
 \bigskip\bigskip
@@ -364,7 +364,7 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 $\div$ rs2 \quad or \quad rd $\leftarrow$ rs1 $\div$ immediate\par
 	\smallbreak
-	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & x & x \\ \end{tabular}
 }
 
 \bigskip\bigskip
@@ -387,7 +387,7 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ $\lfloor$rs$\rfloor$ \par
 	\smallbreak
-	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & x & x \\ \end{tabular}
 }
 
 \pagebreak
@@ -473,8 +473,8 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax:} \texttt{MIN, rd, rs1, rs2} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Purpose:} Find the smallest value between rs1 and rs2 and store it \par
-	\makebox[3.5cm][l]{  } in rd. \par
+	\makebox[3.5cm][l]{Purpose:} Finds the smallest value between rs1 and rs2 and stores \par
+	\makebox[3.5cm][l]{  } the result in rd. \par
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ min(rs1, rs2) \par
 	\smallbreak
@@ -496,8 +496,8 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax:} \texttt{MAX, rd, rs1, rs2} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Purpose:} Find the largest value between rs1 and rs2 and store it \par
-	\makebox[3.5cm][l]{  } in rd. \par
+	\makebox[3.5cm][l]{Purpose:} Finds the largest value between rs1 and rs2 and store the \par
+	\makebox[3.5cm][l]{  } result in rd. \par
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ max(rs1, rs2) \par
 	\smallbreak
@@ -519,8 +519,8 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax:} \texttt{POW, rd, rs1, \#<integer-value>} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Purpose:} Find rs1 raised to an integer value and store it \par
-	\makebox[3.5cm][l]{  } in rd. \par
+	\makebox[3.5cm][l]{Purpose:} Finds rs1 raised to an integer value and stores the \par
+	\makebox[3.5cm][l]{  } result in rd. \par
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ $rs1^{integer-value}$ \par
 	\smallbreak
@@ -542,8 +542,8 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax:} \texttt{EXP, rd, rs} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Purpose:} Find e raised to the value in rs and store it \par
-	\makebox[3.5cm][l]{  } in rd. \par
+	\makebox[3.5cm][l]{Purpose:} Finds e raised to the value in rs and stores the \par
+	\makebox[3.5cm][l]{  } result in rd. \par
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ $e^{rs}$ \par
 	\smallbreak
@@ -565,8 +565,8 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax:} \texttt{SQRT, rd, rs} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Purpose:} Find the square root of the value in rs and store the result \par
-	\makebox[3.5cm][l]{  } in rd. \par
+	\makebox[3.5cm][l]{Purpose:} Finds the square root of the value in rs and stores the\par
+	\makebox[3.5cm][l]{  } result in rd. \par
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ $sqrt{\textrm{rs}}$ \par
 	\smallbreak
