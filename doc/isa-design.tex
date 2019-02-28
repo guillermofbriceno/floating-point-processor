@@ -13,7 +13,7 @@
 \usepackage{steinmetz}
 \usepackage{siunitx}
 \usepackage{subcaption}
-\pgfplotsset{compat=1.16}
+\pgfplotsset{}
 \usepackage{tabularx}
 
 \topmargin=-0.45in
@@ -89,7 +89,7 @@
 \begin{minipage}[t]{110mm}
 	\begin{tabular}{p{12mm}|C{15mm}|C{75.15mm}|}
 		\cline{2-3}
-		NOP: & 000000 & 0 \\ 
+		NOP & 000000 & 0 \\ 
 		\cline{2-3}
 	\end{tabular} 
 	
@@ -97,7 +97,7 @@
 
 	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
 		\cline{2-5}
-		SET: & 000001 & rd & rs & 18-bit immediate \\
+		SET & 000001 & rd & rs & 18-bit immediate \\
 		\cline{2-5}
 	\end{tabular}
 
@@ -105,16 +105,48 @@
 	
 	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{65.3mm}|}
 		\cline{2-4}
-		LOAD: & 000010 & rd & 22-bit immediate \\
+		LOAD & 000010 & rd & 22-bit immediate \\
 		\cline{2-4}
 	\end{tabular}
-	
+
+	\medskip
+
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
+		\cline{2-5}
+		MOV & 000011 & rd & rs & 0  \\
+		\cline{2-5}
+	\end{tabular}
+
+	\medskip
+
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
+		\cline{2-6}
+		FADD & 000011 & rd & rs1 & rs2 & 0 \\
+		\cline{2-6}
+	\end{tabular}
+
+	\medskip
+
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
+		\cline{2-6}
+		FSUB & 000100 & rd & rs1 & rs2 & 0 \\
+		\cline{2-6}
+	\end{tabular}
+
+	\medskip
+
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
+		\cline{2-6}
+		NEG & 000101 & rd & rs1 & 0 & 0 \\
+		\cline{2-6}
+	\end{tabular}
+
 
 \end{minipage}
 
 \pagebreak
 
-\huge\textbf{ADD}\\
+\huge\textbf{FADD}\\
 \noindent\rule{10cm}{0.4pt}
 \normalsize
 
@@ -122,4 +154,3 @@ Format c-type: ADD, rd, rs, rs\\
 Format i-type: ADD, rd, rs, immediate\\
 Purpose: To add two 32 bit integers
 \end{document}
-
