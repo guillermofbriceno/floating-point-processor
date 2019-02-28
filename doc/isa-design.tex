@@ -197,18 +197,58 @@
 {\large
 	\makebox[3.5cm][l]{Opcode:} \texttt{000010} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Syntax r-type:} \texttt{LOAD, rd, M[rs]} \par
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{LOAD, rd, rs} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Purpose:} Assign the value from the memory address specified in rs to rd. \par
+	\makebox[3.5cm][l]{Purpose:} Assign rd the value from the memory address in rs. \par
 	\smallbreak
-	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ FPvalue \par
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ M[rs] \par
 }
 
 \bigskip\bigskip
 
+%STORE
+\flushleft
+\LARGE\textbf{STORE} \large \hfill Store value to memory
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000011} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{STORE, rd, rs} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Assign memory location specified in rd to value in rs. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} M[rd] $\leftarrow$ rs \par
+}
+
+\bigskip\bigskip
+
+%MOVE
+\flushleft
+\LARGE\textbf{MOVE} \large \hfill Copy value from a register to another
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000100} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{MOVE, rd, rs} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Assign rd the value in rs. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs \par
+}
+
+\pagebreak
+
 %FADD
 \flushleft
-\LARGE\textbf{FADD} \large \hfill Add 32-bit floating-point numbers
+\LARGE\textbf{FADD} \large \hfill Add 32-bit floating-point value
 
 \kern-3pt
 \noindent\rule{16.5cm}{0.4pt}
@@ -221,7 +261,7 @@
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FADD, rd, rs1, <32-bit ? immediate>} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Purpose:} Performs addition on two 32-bit floating-point integers from rs1 and \par
+	\makebox[3.5cm][l]{Purpose:} Performs addition on two 32-bit floating-point values from rs1 and \par
 	\makebox[3.5cm][l]{  } rs2, or an immediate in place of rs2, and stores the result in rd. \par
 	\smallbreak
 	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 + rs2 \quad or \quad rd $\leftarrow$ rs1 + immediate\par
@@ -229,5 +269,124 @@
 	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
 }
 
+\bigskip\bigskip
 
+%FSUB
+\flushleft
+\LARGE\textbf{FSUB} \large \hfill Subtract 32-bit floating-point values
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000110} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FSUB, rd, rs1, rs2} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FSUB, rd, rs1, <32-bit ? immediate>} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Performs subtraction on two 32-bit floating-point values from rs1 and \par
+	\makebox[3.5cm][l]{  } rs2, or an immediate in place of rs2, and stores the result in rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 - rs2 \quad or \quad rd $\leftarrow$ rs1 - immediate\par
+	\smallbreak
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+}
+
+\bigskip\bigskip
+
+%FNEG
+\flushleft
+\LARGE\textbf{FNEG} \large \hfill Negate a 32-bit floating-point value
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000111} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax:} \texttt{FNEG, rd, rs} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Performs negation on a 32-bit floating-point value from rs and \par
+	\makebox[3.5cm][l]{  } stores the result in rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ -rs \par 
+	\smallbreak
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+}
+
+\pagebreak
+
+%FMUL
+\flushleft
+\LARGE\textbf{FMUL} \large \hfill Multiply two 32-bit floating-point values
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{001000} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FMUL, rd, rs1, rs2} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FMUL, rd, rs1, <32-bit ? immediate>} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Performs multiplication on two 32-bit floating-point values from rs1 \par
+	\makebox[3.5cm][l]{  } and rs2, or an immediate in place of rs2, and stores the result in rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 $*$ rs2 \quad or \quad rd $\leftarrow$ rs1 $*$ immediate\par
+	\smallbreak
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+}
+
+\bigskip\bigskip
+
+%FDIV
+\flushleft
+\LARGE\textbf{FDIV} \large \hfill Divide two 32-bit floating-point values
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{001001} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FDIV, rd, rs1, rs2} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FDIV, rd, rs1, <32-bit ? immediate>} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Performs division on two 32-bit floating-point values from rs1 \par
+	\makebox[3.5cm][l]{  } and rs2, or an immediate in place of rs2, and stores the result in rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 $\div$ rs2 \quad or \quad rd $\leftarrow$ rs1 $\div$ immediate\par
+	\smallbreak
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+}
+
+\bigskip\bigskip
+
+%Floor
+\flushleft
+\LARGE\textbf{FLOOR} \large \hfill Compute the floor function
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{001010} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FLOOR, rd, rs} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Rounds the value in rs to the nearest lowest integer and stores the \par
+	\makebox[3.5cm][l]{  } result in rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ $\lfloor$rs$\rfloor$ \par
+	\smallbreak
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+}
 \end{document}
