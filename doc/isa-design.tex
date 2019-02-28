@@ -56,7 +56,7 @@
 
 	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
 		\cline{2-6}
-		c-type: & opcode & rd & rs1 & rs2 & 0\\ 
+		r-type: & opcode & rd & rs1 & rs2 & 0\\ 
 		\cline{2-6}
 	\end{tabular} 
 	
@@ -146,11 +146,88 @@
 
 \pagebreak
 
-\huge\textbf{FADD}\\
-\noindent\rule{10cm}{0.4pt}
+\rhead{ISA Specification}
+
+%NOP
+\flushleft
+\LARGE\textbf{NOP} \large \hfill No operation
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
 \normalsize
 
-Format c-type: ADD, rd, rs, rs\\
-Format i-type: ADD, rd, rs, immediate\\
-Purpose: To add two 32 bit integers
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000000} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax:} \texttt{NOP} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Perform no oprations. \par
+}
+
+\bigskip\bigskip
+
+%SET
+\flushleft
+\LARGE\textbf{SET} \large \hfill Set register to floating-point value
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000001} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{SET, rd, \#<32-bit FP value>} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Assign a 32-bit floating point value to rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ FPvalue \par
+}
+
+\bigskip\bigskip
+
+%LOAD
+\flushleft
+\LARGE\textbf{LOAD} \large \hfill Load value from memory
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000010} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{LOAD, rd, M[rs]} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Assign the value from the memory address specified in rs to rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ FPvalue \par
+}
+
+\bigskip\bigskip
+
+%FADD
+\flushleft
+\LARGE\textbf{FADD} \large \hfill Add 32-bit floating-point numbers
+
+\kern-3pt
+\noindent\rule{16.5cm}{0.4pt}
+\normalsize
+
+{\large
+	\makebox[3.5cm][l]{Opcode:} \texttt{000101} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FADD, rd, rs1, rs2} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FADD, rd, rs1, <32-bit ? immediate>} \par
+	\smallbreak
+	\makebox[3.5cm][l]{Purpose:} Performs addition on two 32-bit floating-point integers from rs1 and \par
+	\makebox[3.5cm][l]{  } rs2, or an immediate in place of rs2, and stores the result in rd. \par
+	\smallbreak
+	\makebox[3.5cm][l]{Operation:} rd $\leftarrow$ rs1 + rs2 \quad or \quad rd $\leftarrow$ rs1 + immediate\par
+	\smallbreak
+	\makebox[3.5cm][l]{Condition Codes:} \begin{tabular}{lll} N \quad & Z \quad & V \\ \hline x & - & x \\ \end{tabular}
+}
+
+
 \end{document}
