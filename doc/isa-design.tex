@@ -15,13 +15,15 @@
 \usepackage{subcaption}
 \pgfplotsset{}
 \usepackage{tabularx}
+\usepackage{marginnote}
 
 \topmargin=-0.45in
-\evensidemargin=0in
+\evensidemargin=0cm
 \oddsidemargin=0in
 \textwidth=6.5in
 \textheight=9.0in
 \headsep=0.25in
+
 
 \linespread{1.1}
 
@@ -36,46 +38,122 @@
 
 \lhead{Group P}
 \chead{Computer Organization Project}
-\rhead{ISA Reference List}
+\rhead{ISA Introduction}
+
+\title{
+	\vspace{2in}
+	\textmd{Computer Organization \\ Floating Point Coprocessor}\\
+	\vspace{1cm}
+	\textmd{\textbf{Instruction Set Specification}}
+	\vspace{5cm}
+}
+
+\author{Guillermo Brice\~{n}o \\ Rene Nicklich \\ Austin Lantz}
+
 
 
 \begin{document}
-\section{Instruction Set Reference List}
+
+\maketitle
+
+\pagebreak
+
+\section{Introduction}
+This document describes the instruction set architecture for a 32-bit floating-point coprocessor. Each instruction is described with its assembler syntax in section 2.\\
+
+\subsection{Instruction Encoding}
+The twenty-three instructions can be grouped by their instruction encoding formats. The keywords \texttt{rd}, \texttt{rs1}, and \texttt{rs2} stand for the 4-bit register addresses from $\texttt{0000}_2$ to $\texttt{1111}_2$, corresponding to a destination register, the first source register, and second source register respectively. In single-source or immediate mode addressing, the keyword \texttt{rs} is used instead. Bit 31 is used to specify register or immediate addressing mode for double-operand ALU operations.
+
+\normalsize
 \bigskip
 
 \begin{minipage}[t]{0.3\textwidth}
 	\begin{center}
 		\medskip
-		\textbf{Formats}
+		\textbf{Double-Operand\\ ALU}
 	\end{center}
 \end{minipage}
 \begin{minipage}[t]{110mm}
-	\begin{tabular}{p{12mm}p{15mm}p{10mm}p{10mm}p{10mm}p{22.5mm}R{22.5mm}}
-		& 31 & 25 & 21 & 17 & 13 & 0 \\ 
+	\begin{tabular}{p{12mm}p{2.5mm}p{13mm}p{10mm}p{10mm}p{10mm}p{22.5mm}R{22.5mm}}
+		& \footnotesize{} & \footnotesize{30} & \footnotesize{25} & \footnotesize{21} & \footnotesize{17} & \footnotesize{13} & \footnotesize{0} \\ 
 	\end{tabular} 
 
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
-		\cline{2-6}
-		r-type: & opcode & rd & rs1 & rs2 & 0\\ 
-		\cline{2-6}
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
+		\cline{2-7}
+		r-type: & 0 & opcode & rd & rs1 & rs2 & 0\\ 
+		\cline{2-7}
 	\end{tabular} 
 	
 	\medskip
 
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{10mm}|C{55.15mm}|}
+		\cline{2-6}
+		i-type: & 1 & opcode & rd & rs & 18-bit immediate \\
+		\cline{2-6}
+	\end{tabular}
+\end{minipage}
+
+\bigskip\bigskip
+
+\begin{minipage}[t]{0.3\textwidth}
+	\begin{center}
+		\textbf{Single-Operand\\ ALU}
+	\end{center}
+\end{minipage}
+\begin{minipage}[t]{110mm}	
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
 		\cline{2-5}
-		i-type: & opcode & rd & rs & 18-bit immediate \\
+		 EXP: & 0 & opcode & rd & 22-bit immediate \\
 		\cline{2-5}
 	\end{tabular}
 
 	\medskip
-	
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{65.3mm}|}
-		\cline{2-4}
-		l-type: & opcode & rd & 22-bit immediate \\
-		\cline{2-4}
+
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
+		\cline{2-5}
+		 & 0 & opcode & rd & 0 \\
+		\cline{2-5}
 	\end{tabular}
-	
+\end{minipage}
+
+\bigskip\bigskip\bigskip
+
+\begin{minipage}[t]{0.3\textwidth}
+	\begin{center}
+		\textbf{Load, Store, \\ Move}
+	\end{center}
+\end{minipage}
+\begin{minipage}[t]{110mm}
+
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{10mm}|C{55.15mm}|}
+		\cline{2-6}
+		 & 0 & opcode & rd & rs & 0 \\
+		\cline{2-6}
+	\end{tabular}
+
+	\end{minipage}
+
+\bigskip\bigskip\bigskip
+
+\begin{minipage}[t]{0.3\textwidth}
+	\begin{center}
+		\textbf{Branching}
+	\end{center}
+\end{minipage}
+\begin{minipage}[t]{110mm}
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
+		\cline{2-5}
+		\quad B: & 0 & opcode & rd & 22-bit immediate \\
+		\cline{2-5}
+	\end{tabular}
+
+	\medskip
+
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
+		\cline{2-5}
+		 & 0 & opcode & rd & 0 \\
+		\cline{2-5}
+	\end{tabular}
 
 \end{minipage}
 
@@ -83,70 +161,23 @@
 
 \begin{minipage}[t]{0.3\textwidth}
 	\begin{center}
-		\textbf{Instructions}
+		\textbf{No-Operation and \\ Halt}
 	\end{center}
 \end{minipage}
 \begin{minipage}[t]{110mm}
-	\begin{tabular}{p{12mm}|C{15mm}|C{75.15mm}|}
-		\cline{2-3}
-		NOP & 000000 & 0 \\ 
-		\cline{2-3}
-	\end{tabular} 
-	
-	\medskip
-
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
-		\cline{2-5}
-		SET & 000001 & rd & rs & 18-bit immediate \\
-		\cline{2-5}
-	\end{tabular}
-
-	\medskip
-	
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{65.3mm}|}
+	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{75.3mm}|}
 		\cline{2-4}
-		LOAD & 000010 & rd & 22-bit immediate \\
+		 & 0 & opcode &  0 \\
 		\cline{2-4}
 	\end{tabular}
-
-	\medskip
-
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
-		\cline{2-5}
-		MOV & 000011 & rd & rs & 0  \\
-		\cline{2-5}
-	\end{tabular}
-
-	\medskip
-
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
-		\cline{2-6}
-		FADD & 000011 & rd & rs1 & rs2 & 0 \\
-		\cline{2-6}
-	\end{tabular}
-
-	\medskip
-
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
-		\cline{2-6}
-		FSUB & 000100 & rd & rs1 & rs2 & 0 \\
-		\cline{2-6}
-	\end{tabular}
-
-	\medskip
-
-	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
-		\cline{2-6}
-		NEG & 000101 & rd & rs1 & 0 & 0 \\
-		\cline{2-6}
-	\end{tabular}
-
-
 \end{minipage}
 
 \pagebreak
 
 \rhead{ISA Specification}
+\section{Instruction Set Specification}
+
+\bigskip\bigskip
 
 %NOP
 \flushleft
