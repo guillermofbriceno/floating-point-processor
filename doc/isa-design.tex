@@ -290,7 +290,7 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FADD rd, rs1, rs2} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FADD rd, rs1, \#<32-bit ? immediate>} \par
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FADD rd, rs1, \#<18-bit immediate>} \par
 	\smallbreak
 	\makebox[3.5cm][l]{Purpose:} Performs addition on two 32-bit floating-point values from rs1 and \par
 	\makebox[3.5cm][l]{  } rs2, or an immediate in place of rs2, and stores the result in rd. \par
@@ -315,7 +315,7 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FSUB rd, rs1, rs2} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FSUB rd, rs1, \#<32-bit ? immediate>} \par
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FSUB rd, rs1, \#<18-bit immediate>} \par
 	\smallbreak
 	\makebox[3.5cm][l]{Purpose:} Performs subtraction on two 32-bit floating-point values from rs1 and \par
 	\makebox[3.5cm][l]{  } rs2, or an immediate in place of rs2, and stores the result in rd. \par
@@ -363,7 +363,7 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FMUL rd, rs1, rs2} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FMUL rd, rs1, \#<32-bit ? immediate>} \par
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FMUL rd, rs1, \#<18-bit immediate>} \par
 	\smallbreak
 	\makebox[3.5cm][l]{Purpose:} Performs multiplication on two 32-bit floating-point values from rs1 \par
 	\makebox[3.5cm][l]{  } and rs2, or an immediate in place of rs2, and stores the result in rd. \par
@@ -388,7 +388,7 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\smallbreak
 	\makebox[3.5cm][l]{Syntax r-type:} \texttt{FDIV rd, rs1, rs2} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FDIV rd, rs1, \#<32-bit ? immediate>} \par
+	\makebox[3.5cm][l]{Syntax i-type:} \texttt{FDIV rd, rs1, \#<18-bit immediate>} \par
 	\smallbreak
 	\makebox[3.5cm][l]{Purpose:} Performs division on two 32-bit floating-point values from rs1 \par
 	\makebox[3.5cm][l]{  } and rs2, or an immediate in place of rs2, and stores the result in rd. \par
@@ -548,7 +548,7 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 {\large
 	\makebox[3.5cm][l]{Opcode:} \texttt{10000} \par
 	\smallbreak
-	\makebox[3.5cm][l]{Syntax:} \texttt{POW rd, rs, \#<integer-value>} \par
+	\makebox[3.5cm][l]{Syntax:} \texttt{POW rd, rs, \#<22-bit integer-value>} \par
 	\smallbreak
 	\makebox[3.5cm][l]{Purpose:} Finds rs1 raised to an integer value and stores the \par
 	\makebox[3.5cm][l]{  } result in rd. \par
