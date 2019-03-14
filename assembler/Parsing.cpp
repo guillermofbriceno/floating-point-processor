@@ -26,7 +26,7 @@ int main(void)
 	while (!inFile.eof())
 	{
 		getline(inFile, data);
-		cout<<data<<endl;
+		cout <<data<<endl;
 	}
 
 	cin.ignore();
