@@ -74,23 +74,15 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\end{center}
 \end{minipage}
 \begin{minipage}[t]{110mm}
-	\begin{tabular}{p{12mm}p{2.5mm}p{13mm}p{10mm}p{10mm}p{10mm}p{22.5mm}R{22.5mm}}
-		& \footnotesize{} & \footnotesize{30} & \footnotesize{25} & \footnotesize{21} & \footnotesize{17} & \footnotesize{13} & \footnotesize{0} \\ 
+	\begin{tabular}{p{12mm}p{14.5mm}p{10mm}p{10mm}p{10mm}p{22.5mm}R{22.5mm}}
+		& \footnotesize{31} & \footnotesize{25} & \footnotesize{21} & \footnotesize{17} & \footnotesize{13} & \footnotesize{0} \\ 
 	\end{tabular} 
 
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
-		\cline{2-7}
-		r-type: & 0 & opcode & rd & rs1 & rs2 & 0\\ 
-		\cline{2-7}
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{10mm}|C{45mm}|}
+		\cline{2-6}
+		& opcode & rd & rs1 & rs2 & 0\\ 
+		\cline{2-6}
 	\end{tabular} 
-	
-	\medskip
-
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{10mm}|C{55.15mm}|}
-		\cline{2-6}
-		i-type: & 1 & opcode & rd & rs & 18-bit immediate \\
-		\cline{2-6}
-	\end{tabular}
 \end{minipage}
 
 \bigskip\bigskip
@@ -101,17 +93,17 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\end{center}
 \end{minipage}
 \begin{minipage}[t]{110mm}	
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.3mm}|}
 		\cline{2-5}
-		 EXP: & 0 & opcode & rd & 22-bit immediate \\
+			EXP: & opcode & rd & rs & 18-bit immediate \\
 		\cline{2-5}
 	\end{tabular}
 
 	\medskip
 
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.3mm}|}
 		\cline{2-5}
-		 & 0 & opcode & rd & 0 \\
+		 & opcode & rd & rs & 0 \\
 		\cline{2-5}
 	\end{tabular}
 \end{minipage}
@@ -125,10 +117,10 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 \end{minipage}
 \begin{minipage}[t]{110mm}
 
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{10mm}|C{55.15mm}|}
-		\cline{2-6}
-		 & 0 & opcode & rd & rs & 0 \\
-		\cline{2-6}
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{10mm}|C{55.15mm}|}
+		\cline{2-5}
+		 & opcode & rd & rs & 0 \\
+		\cline{2-5}
 	\end{tabular}
 
 	\end{minipage}
@@ -141,18 +133,18 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\end{center}
 \end{minipage}
 \begin{minipage}[t]{110mm}
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
-		\cline{2-5}
-		\quad B: & 0 & opcode & rd & 22-bit immediate \\
-		\cline{2-5}
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{65.3mm}|}
+		\cline{2-4}
+		\quad B: & opcode & rd & 23-bit immediate \\
+		\cline{2-4}
 	\end{tabular}
 
 	\medskip
 
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{10mm}|C{65.3mm}|}
-		\cline{2-5}
-		 & 0 & opcode & rd & 0 \\
-		\cline{2-5}
+	\begin{tabular}{p{12mm}|C{15mm}|C{10mm}|C{65.3mm}|}
+		\cline{2-4}
+		 & opcode & rd & 0 \\
+		\cline{2-4}
 	\end{tabular}
 
 \end{minipage}
@@ -165,10 +157,10 @@ The twenty-three instructions can be grouped by their instruction encoding forma
 	\end{center}
 \end{minipage}
 \begin{minipage}[t]{110mm}
-	\begin{tabular}{p{12mm}|C{2.5mm}|C{12.5mm}|C{75.3mm}|}
-		\cline{2-4}
-		 & 0 & opcode &  0 \\
-		\cline{2-4}
+	\begin{tabular}{p{12mm}|C{15mm}|C{75.3mm}|}
+		\cline{2-3}
+		 & opcode &  0 \\
+		\cline{2-3}
 	\end{tabular}
 \end{minipage}
 
