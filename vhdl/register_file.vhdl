@@ -4,13 +4,13 @@ use ieee.numeric_std.all;
 
 entity register_file is
 	port(
-	rs1_sel:	in	std_logic_vector(31 downto 0);
-	rs2_sel:	in	std_logic_vector(31 downto 0);
-	rd_sel:	in	std_logic_vector(31 downto 0);
+	rs1_sel:	in	std_logic_vector(3 downto 0);
+	rs2_sel:	in	std_logic_vector(3 downto 0);
+	rd_sel:		in	std_logic_vector(3 downto 0);
 	value_in:	in	std_logic_vector(31 downto 0);
 	rs1_out:	out	std_logic_vector(31 downto 0);
 	rs2_out:	out	std_logic_vector(31 downto 0);
-	clk_write: in std_ulogic
+	clk_write: 	in std_ulogic
 );
 end register_file;
 
