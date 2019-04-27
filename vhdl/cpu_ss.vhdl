@@ -69,7 +69,6 @@ architecture behave of cpu is
 	signal data_writeback 	:	std_logic_vector(31 downto 0);
 	
 begin
-
 	program_counter: process(clk)
 	begin
 		if falling_edge(clk) then
@@ -217,6 +216,8 @@ begin
 		rs2_out 	=> ry_out_to_mux,
 		clk_write 	=> reg_write
 	);
+	
+	mem_addr <= ry_out_to_mux;
 
 	alu_mux: process(instruction, ry_out_to_mux, imm) is
 	begin
@@ -236,5 +237,27 @@ begin
 		neg 	=> alu_neg,
 		zero 	=> alu_zero
 	);
+	
+	wirte_mem <= mem_store;
+	out_mem_data <= alu_out;
+	--alu_out_split: process(alu_out) is
+	--begin
+	--	out_mem_data <= alu_out;
+	--end process;
+
+	branch_logic: process(b, bn, bz, alu_neg, alu_zero) is 
+	begin
+		do_branch <= (bn and alu_neg) or (bz and alu_zero) or b;
+	end process;
+
+	mem_alu_mux: process(alu_out, load, in_mem_data) is
+	begin
+		if load = '0' then
+			data_writeback <= alu_out;
+		else
+			data_writeback <= in_mem_data;
+		end if;
+	end process;
+
 
 end behave;
