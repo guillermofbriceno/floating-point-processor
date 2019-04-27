@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity computer is
 	port(
-	clock: 	in  	std_ulogic
+	clock: 	in  	std_logic
 );
 end computer;
 
