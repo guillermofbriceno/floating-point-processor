@@ -9,6 +9,7 @@ entity instruction_memory is
 	port (
 	addr: in std_logic_vector(9 downto 0);
 	inst: out std_logic_vector(31 downto 0)
+	next_inst_from_mem: out std_logic_vector(31 downto 0)
 	     );
 end instruction_memory;
 
@@ -29,4 +30,5 @@ architecture behave of instruction_memory is
 	signal mem: memory_array := init_memory("program.data");
 begin
 	inst <= mem(to_integer(unsigned(addr)));
+	next_inst_from_mem(to_integer(unsigned(addr)) + 1);
 end behave;
