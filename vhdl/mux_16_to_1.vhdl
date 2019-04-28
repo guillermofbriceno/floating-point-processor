@@ -10,7 +10,7 @@ end mux_16_to_1;
 
 architecture behave of mux_16_to_1 is
 begin
-process(all) is begin
+process(in0, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) is begin
 		case sel is
 			when "0000" => o <= in0;
 			when "0001" => o <= in1;

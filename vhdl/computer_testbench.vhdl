@@ -14,9 +14,11 @@ architecture test of computer_testbench is
 	signal clk: std_logic;
 
 begin
-	fp_cpu: computer port map(
+	fp_cpu: computer port map
+	(
 		clock => clk
 	);
+
 	process begin
 
 		clk <= '0';

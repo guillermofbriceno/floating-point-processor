@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
 
 entity cpu is
 	port(
@@ -28,12 +29,13 @@ architecture behave of cpu is
 	signal load	: std_logic;
 
 	--program counter datapaths
-	signal pc_addr		:	std_logic_vector(9 downto 0); --pc address bus
+	signal pc_input_addr	:	std_logic_vector(9 downto 0) := "0000000000"; --pc address bus
+	signal pc_output_addr	:	std_logic_vector(9 downto 0) := "0000000000";
 	signal pc_addr_plus_one	: 	std_logic_vector(9 downto 0); --incremented address
-	signal do_branch	: 	std_logic; --final OR branch control line
+	signal do_branch	: 	std_logic := '0'; --final OR branch control line
 
 	--ALU component and datapaths
-	component ALU
+	component alu
 		port(
 			A:	in	std_logic_vector(31 downto 0);
 			B:	in	std_logic_vector(31 downto 0);
@@ -42,7 +44,7 @@ architecture behave of cpu is
 			neg:	out	std_ulogic;
 			zero: 	out 	std_ulogic
 		);
-	end component ALU;
+	end component alu;
 	
 	signal alu_output	:	std_logic_vector(31 downto 0);
 	signal alu_zero		:	std_ulogic;
@@ -71,14 +73,26 @@ architecture behave of cpu is
 begin
 	program_counter: process(clk)
 	begin
-		if falling_edge(clk) then
-			pc <= pc_addr;
+		if rising_edge(clk) then
+			pc_output_addr <= pc_input_addr;
 		end if;
 	end process program_counter;
 
-	control_unit: process(instruction)
-		variable opcode : std_logic_vector(4 downto 0) := instruction(31 downto 27);
+	pc <= pc_output_addr;
+
+	pc_logic: process(pc_output_addr, instruction, do_branch) is
 	begin
+		if do_branch = '1' then
+			pc_input_addr <= instruction(9 downto 0);
+		else
+			pc_input_addr <= pc_output_addr + '1';
+		end if;
+	end process pc_logic;
+
+	control_unit: process(instruction)
+		variable opcode : std_logic_vector(4 downto 0);
+	begin
+		opcode := instruction(31 downto 27);
 		if opcode = "00000" then --nop
 			halt		<= '0';
 			reg_write 	<= '0';
@@ -99,6 +113,8 @@ begin
 			bz 		<= '0';
 			b 		<= '0';
 			load 		<= '0';
+			--pc_addr_plus_one<= std_logic_vector(unsigned(pc_output_addr) + 1);
+			pc_addr_plus_one <= pc_output_addr + '1';
 		elsif opcode = "00010" then --load
 			halt 		<= '0';
 			reg_write 	<= '1';
@@ -192,19 +208,6 @@ begin
 		end if;
 	end process control_unit;
 
-	pc_increment: process(pc_addr) is
-	begin
-		pc_addr_plus_one <= std_logic_vector(unsigned(pc_addr) + 1);
-	end process;
-
-	pc_mux: process(pc_addr_plus_one, instruction, do_branch) is
-	begin
-		if (do_branch = '1') then
-			pc_addr <= instruction(9 downto 0);
-		else
-			pc_addr <= pc_addr_plus_one;
-		end if;
-	end process;
 
 	registers: register_file  port map
 	(
@@ -224,11 +227,11 @@ begin
 		if imm = '0' then
 			y_alu_in <= ry_out_to_mux;
 		else
-			y_alu_in <= instruction; --this is where things get weird with SET, will have to redo this with next_inst
+			y_alu_in <= next_inst; --this is where things get weird with SET, will have to redo this with POW
 		end if;
 	end process;
 
-	ALU_main: ALU port map
+	ALU_main: alu port map
 	(
 		A 	=> x_alu_in,
 		B    	=> y_alu_in,
@@ -238,8 +241,8 @@ begin
 		zero 	=> alu_zero
 	);
 	
-	wirte_mem <= mem_store;
-	out_mem_data <= alu_out;
+	write_mem <= mem_store;
+	out_mem_data <= alu_output;
 	--alu_out_split: process(alu_out) is
 	--begin
 	--	out_mem_data <= alu_out;
@@ -250,10 +253,10 @@ begin
 		do_branch <= (bn and alu_neg) or (bz and alu_zero) or b;
 	end process;
 
-	mem_alu_mux: process(alu_out, load, in_mem_data) is
+	mem_alu_mux: process(alu_output, load, in_mem_data) is
 	begin
 		if load = '0' then
-			data_writeback <= alu_out;
+			data_writeback <= alu_output;
 		else
 			data_writeback <= in_mem_data;
 		end if;

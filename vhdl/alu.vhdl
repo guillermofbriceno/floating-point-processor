@@ -46,7 +46,7 @@ begin
 														in15 => out15,
 														sel  => func,
 														o 	 => outp);
-	process(all) begin	
+	process(A, B, func) begin	
 
 		out0  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (FADD)
 		out1  <= to_std_logic_vector(to_float(A) - to_float(B)); --not implemented (FSUB)
