@@ -62,8 +62,8 @@ begin
 		out11 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (ABS)
 		out12 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (EXP)
 		out13 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (SQRT)
-		out14 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (PASS A)
-		out15 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (PASS B)
+		out14 <= A; --not implemented (PASS A)
+		out15 <= B; --not implemented (PASS B)
 
 		if outp(31) = '1' then
 			neg <= '1';

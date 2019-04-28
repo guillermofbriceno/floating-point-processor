@@ -19,14 +19,17 @@ end cpu;
 architecture behave of cpu is
 	--control unit control signals
 	signal halt	: std_logic;
-	signal reg_write: std_logic;
+	signal ctrl_reg_write: std_logic;
 	signal alu_op	: std_logic_vector(3 downto 0);
-	signal mem_store: std_logic;
+	signal ctrl_mem_store: std_logic;
 	signal imm	: std_logic;
 	signal bn	: std_logic;
 	signal bz	: std_logic;
 	signal b	: std_logic;
 	signal load	: std_logic;
+
+	signal reg_write: std_logic;
+	signal actual_write_mem: std_logic;
 
 	--program counter datapaths
 	signal pc_input_addr	:	std_logic_vector(9 downto 0) := "0000000000"; --pc address bus
@@ -68,12 +71,12 @@ architecture behave of cpu is
 	signal ry_out_to_mux	:	std_logic_vector(31 downto 0);
 
 	--Data Memory
-	signal data_writeback 	:	std_logic_vector(31 downto 0);
+	signal data_writeback 	:	std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
 	
 begin
 	program_counter: process(clk)
 	begin
-		if rising_edge(clk) then
+		if falling_edge(clk) then
 			pc_output_addr <= pc_input_addr;
 		end if;
 	end process program_counter;
@@ -85,7 +88,11 @@ begin
 		if do_branch = '1' then
 			pc_input_addr <= instruction(9 downto 0);
 		else
-			pc_input_addr <= pc_output_addr + '1';
+			if instruction(31 downto 27) = "00001" then
+				pc_input_addr <= pc_output_addr + 2;
+			else
+				pc_input_addr <= pc_output_addr + '1';
+			end if;
 		end if;
 	end process pc_logic;
 
@@ -95,8 +102,8 @@ begin
 		opcode := instruction(31 downto 27);
 		if opcode = "00000" then --nop
 			halt		<= '0';
-			reg_write 	<= '0';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '0';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "0000";
 			imm 		<= '0';
 			bn 		<= '0';
@@ -105,20 +112,18 @@ begin
 			load 		<= '0';
 		elsif opcode = "00001" then --set
 			halt 		<= '0';
-			reg_write 	<= '1';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '1';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "1111";
 			imm 		<= '1';
 			bn 		<= '0';
 			bz 		<= '0';
 			b 		<= '0';
 			load 		<= '0';
-			--pc_addr_plus_one<= std_logic_vector(unsigned(pc_output_addr) + 1);
-			pc_addr_plus_one <= pc_output_addr + '1';
 		elsif opcode = "00010" then --load
 			halt 		<= '0';
-			reg_write 	<= '1';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '1';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "0000";
 			imm 		<= '1';
 			bn 		<= '0';
@@ -127,8 +132,8 @@ begin
 			load 		<= '0';
 		elsif opcode = "00011" then --store
 			halt 		<= '0';
-			reg_write 	<= '0';
-			mem_store 	<= '1';
+			ctrl_reg_write 	<= '0';
+			ctrl_mem_store 	<= '1';
 			alu_op 		<= "1110";
 			imm 		<= '0';
 			bn 		<= '0';
@@ -137,8 +142,8 @@ begin
 			load 		<= '0';
 		elsif opcode = "00100" then --move
 			halt 		<= '0';
-			reg_write 	<= '1';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '1';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "1110";
 			imm 		<= '0';
 			bn 		<= '0';
@@ -147,8 +152,8 @@ begin
 			load 		<= '0';
 		elsif (unsigned(opcode) >=  5) and (unsigned(opcode) <= 17) then --math operations except POW which is opcode 18
 			halt 		<= '0';
-			reg_write 	<= '1';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '1';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= std_logic_vector( unsigned( opcode(3 downto 0) ) - 5 );
 			imm 		<= '0';
 			bn 		<= '0';
@@ -157,8 +162,8 @@ begin
 			load 		<= '0';
 		elsif opcode = "10010" then --POW
 			halt 		<= '0';
-			reg_write 	<= '1';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '1';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "1101";
 			imm 		<= '1';
 			bn 		<= '0';
@@ -167,8 +172,8 @@ begin
 			load 		<= '0';
 		elsif opcode = "10011" then --Unconditional branch
 			halt 		<= '0';
-			reg_write 	<= '0';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '0';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "0000";
 			imm 		<= '0';
 			bn 		<= '0';
@@ -177,8 +182,8 @@ begin
 			load 		<= '0';
 		elsif opcode = "10100" then --BZ
 			halt 		<= '0';
-			reg_write 	<= '0';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '0';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "1110";
 			imm 		<= '0';
 			bn 		<= '0';
@@ -187,8 +192,8 @@ begin
 			load 		<= '0';
 		elsif opcode = "10101" then --BN
 			halt 		<= '0';
-			reg_write 	<= '0';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '0';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "1110";
 			imm 		<= '0';
 			bn 		<= '1';
@@ -197,8 +202,8 @@ begin
 			load 		<= '0';
 		elsif opcode = "10110" then --Halt
 			halt 		<= '1';
-			reg_write 	<= '0';
-			mem_store 	<= '0';
+			ctrl_reg_write 	<= '0';
+			ctrl_mem_store 	<= '0';
 			alu_op 		<= "0000";
 			imm 		<= '0';
 			bn 		<= '0';
@@ -208,6 +213,7 @@ begin
 		end if;
 	end process control_unit;
 
+	reg_write <= (not clk) and ctrl_reg_write after 2 ps;
 
 	registers: register_file  port map
 	(
@@ -241,7 +247,7 @@ begin
 		zero 	=> alu_zero
 	);
 	
-	write_mem <= mem_store;
+	write_mem <= (not clk) and ctrl_mem_store after 2 ps;
 	out_mem_data <= alu_output;
 	--alu_out_split: process(alu_out) is
 	--begin
