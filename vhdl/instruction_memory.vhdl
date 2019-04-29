@@ -8,12 +8,12 @@ entity instruction_memory is
 	port (
 	addr: in std_logic_vector(9 downto 0);
 	inst: out std_logic_vector(31 downto 0);
-	next_inst_from_mem: out std_logic_vector(31 downto 0)
+	set_value: out std_logic_vector(31 downto 0)
 	     );
 end instruction_memory;
 
 architecture behave of instruction_memory is
-	type memory_array is array (0 to 1023) of std_logic_vector(31 downto 0);
+	type memory_array is array (0 to 1023) of std_logic_vector(63 downto 0);
 	impure function init_memory (mem_file_name : in string) return memory_array is
 		file instruction_file: text open read_mode is mem_file_name;
 		variable instruction: line;
@@ -28,6 +28,6 @@ architecture behave of instruction_memory is
 
 	signal mem: memory_array := init_memory("program.hex");
 begin
-	inst <= mem(to_integer(unsigned(addr)));
-	next_inst_from_mem <= mem(to_integer(unsigned(addr)) + 1);
+	inst <= mem(to_integer(unsigned(addr)))(63 downto 32);
+	set_value <= mem(to_integer(unsigned(addr)))(31 downto 0);
 end behave;

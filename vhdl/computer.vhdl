@@ -13,7 +13,7 @@ architecture behave of computer is
 		port(
 			addr: in std_logic_vector(9 downto 0);
 			inst: out std_logic_vector(31 downto 0);
-			next_inst_from_mem: out std_logic_vector(31 downto 0)
+			set_value: out std_logic_vector(31 downto 0)
 		);
 	end component instruction_memory;
 
@@ -36,13 +36,13 @@ architecture behave of computer is
 			pc:		out	std_logic_vector(9  downto 0);
 			write_mem: 	out  	std_ulogic;
 			clk: 		in  	std_ulogic;
-			next_inst:	in	std_logic_vector(31 downto 0) --this is not a hardware implementation, only for the SET inst.
+			set_value_in:	in	std_logic_vector(31 downto 0) --this is not a hardware implementation, only for the SET inst.
 		    );
 	end component cpu;
 
 	signal pc_address_bus: 		std_logic_vector(9 downto 0);
 	signal instruction_bus:		std_logic_vector(31 downto 0);
-	signal next_instruction_bus: 	std_logic_vector(31 downto 0);  --for SET
+	signal set_value_bus: 		std_logic_vector(31 downto 0);  --for SET
 
 	signal data_memory_address: 	std_logic_vector(31 downto 0);
 	signal data_from_mem: 		std_logic_vector(31 downto 0);
@@ -54,7 +54,7 @@ begin
 	(
 		addr 			=> pc_address_bus,
 		inst 			=> instruction_bus,
-		next_inst_from_mem 	=> next_instruction_bus
+		set_value 		=> set_value_bus
 	);
 
 	dm: data_memory port map
@@ -74,6 +74,6 @@ begin
 		pc 		=> pc_address_bus,
 		write_mem 	=> data_store_bit,
 		clk 		=> clock,	
-		next_inst 	=> next_instruction_bus
+		set_value_in 	=> set_value_bus
 	);
 end behave;

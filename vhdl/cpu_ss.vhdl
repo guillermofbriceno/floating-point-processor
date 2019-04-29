@@ -12,7 +12,7 @@ entity cpu is
 	pc:		out	std_logic_vector(9  downto 0);
 	write_mem: 	out  	std_ulogic;
 	clk: 		in  	std_ulogic;
-	next_inst:	in	std_logic_vector(31 downto 0) --this is not a hardware implementation, only for the SET inst.
+	set_value_in:	in	std_logic_vector(31 downto 0) --this is not a hardware implementation, only for the SET inst.
 );
 end cpu;
 
@@ -88,11 +88,7 @@ begin
 		if do_branch = '1' then
 			pc_input_addr <= instruction(9 downto 0);
 		else
-			if instruction(31 downto 27) = "00001" then
-				pc_input_addr <= pc_output_addr + 2;
-			else
-				pc_input_addr <= pc_output_addr + '1';
-			end if;
+			pc_input_addr <= pc_output_addr + '1';
 		end if;
 	end process pc_logic;
 
@@ -233,7 +229,7 @@ begin
 		if imm = '0' then
 			y_alu_in <= ry_out_to_mux;
 		else
-			y_alu_in <= next_inst; --this is where things get weird with SET, will have to redo this with POW
+			y_alu_in <= set_value_in; --this is where things get weird with SET, will have to redo this with POW
 		end if;
 	end process;
 
