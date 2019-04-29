@@ -29,12 +29,10 @@ architecture behave of cpu is
 	signal load	: std_logic;
 
 	signal reg_write: std_logic;
-	signal actual_write_mem: std_logic;
 
 	--program counter datapaths
 	signal pc_input_addr	:	std_logic_vector(9 downto 0) := "0000000000"; --pc address bus
 	signal pc_output_addr	:	std_logic_vector(9 downto 0) := "0000000000";
-	signal pc_addr_plus_one	: 	std_logic_vector(9 downto 0); --incremented address
 	signal do_branch	: 	std_logic := '0'; --final OR branch control line
 
 	--ALU component and datapaths
@@ -121,11 +119,11 @@ begin
 			ctrl_reg_write 	<= '1';
 			ctrl_mem_store 	<= '0';
 			alu_op 		<= "0000";
-			imm 		<= '1';
+			imm 		<= '0';
 			bn 		<= '0';
 			bz 		<= '0';
 			b 		<= '0';
-			load 		<= '0';
+			load 		<= '1';
 		elsif opcode = "00011" then --store
 			halt 		<= '0';
 			ctrl_reg_write 	<= '0';
@@ -245,10 +243,6 @@ begin
 	
 	write_mem <= (not clk) and ctrl_mem_store after 2 ps;
 	out_mem_data <= alu_output;
-	--alu_out_split: process(alu_out) is
-	--begin
-	--	out_mem_data <= alu_out;
-	--end process;
 
 	branch_logic: process(b, bn, bz, alu_neg, alu_zero) is 
 	begin
