@@ -11,7 +11,8 @@ entity register_file is
 	value_in:	in	std_logic_vector(31 downto 0);
 	rs1_out:	out	std_logic_vector(31 downto 0);
 	rs2_out:	out	std_logic_vector(31 downto 0);
-	clk_write: 	in 	std_ulogic
+	register16_out:	out	std_logic_vector(31 downto 0);
+	clk_write: 	in std_ulogic
 );
 end register_file;
 
@@ -37,10 +38,11 @@ begin
 
 	rs1_out <= data(to_integer(unsigned(rs1_sel)));
 	rs2_out <= data(to_integer(unsigned(rs2_sel)));
+	register16_out <= data(15);
 
 	write_process: process(clk_write) is
 	begin
-		if falling_edge(clk_write) then
+		if rising_edge(clk_write) then
 			data(to_integer(unsigned(rd_sel))) <= value_in;
 		end if;
 
