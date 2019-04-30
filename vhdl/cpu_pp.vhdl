@@ -109,15 +109,54 @@ architecture behave of cpu is
 
 	signal clk_del  	:	std_logic := '0';
 
+	--Hazard detection
+	signal hazard_detected  : 	boolean := false;
+
+	signal possible_dec_hazard: boolean;
+	signal possible_ex_hazard:  boolean;
+	signal possible_mem_hazard: boolean;
+
+	signal possible_dec_hazard_two: boolean;
+	signal possible_ex_hazard_two:  boolean;
+	signal possible_mem_hazard_two: boolean;
+
+	signal possible_dec_hazard_one: boolean;
+	signal possible_ex_hazard_one:  boolean;
+	signal possible_mem_hazard_one: boolean;
 begin
 	clk_del <= clk after 5 ps;
 
-	program_counter: process(clk_del)
+	--PC and Hazard Control
+	hazard_ctrl: process(fetch_inst, dec_rdata_wrt, dec_mem_store, ex_rdata_wrt, ex_store, mem_rdata_wrt)
 	begin
-		if rising_edge(clk_del) then
+		possible_dec_hazard <= dec_rdata_wrt = '1' or dec_mem_store = '1';
+		possible_ex_hazard <= ex_rdata_wrt = '1' or ex_store = '1';
+		possible_mem_hazard <= mem_rdata_wrt = '1'; 
+
+		possible_dec_hazard_two <= fetch_inst(22 downto 19) = dec_rdata_addr;
+		possible_ex_hazard_two  <= fetch_inst(22 downto 19) = ex_rdata_addr;
+		possible_mem_hazard_two <= fetch_inst(22 downto 19) = mem_rdata_addr;
+
+		possible_dec_hazard_one <= fetch_inst(18 downto 15) = dec_rdata_addr;
+		possible_ex_hazard_one 	<= fetch_inst(18 downto 15) = ex_rdata_addr;
+		possible_mem_hazard_one <= fetch_inst(18 downto 15) = mem_rdata_addr;
+	end process hazard_ctrl;
+
+	hazard_detected <= (possible_dec_hazard_two and possible_dec_hazard) or
+			   (possible_ex_hazard_two  and possible_ex_hazard)  or
+			   (possible_mem_hazard_two and possible_mem_hazard) or
+			   (possible_dec_hazard_one and possible_dec_hazard) or
+			   (possible_ex_hazard_one  and possible_ex_hazard)  or
+			   (possible_mem_hazard_one and possible_mem_hazard);
+
+	hazard_control: process(clk_del)
+		--variable hazard_detected: boolean;
+	begin
+	
+		if rising_edge(clk_del) and not hazard_detected  then
 			pc_output_addr <= pc_input_addr;
 		end if;
-	end process program_counter;
+	end process hazard_control;
 
 	pc <= pc_output_addr;
 
@@ -130,10 +169,11 @@ begin
 		end if;
 	end process pc_logic;
 
+
 	--FETCH/DECODE
 	fetch_register: process(clk_del)
 	begin
-		if rising_edge(clk_del) then
+		if rising_edge(clk_del) and not hazard_detected then
 			fetch_inst 	<= instruction;
 			fetch_imm_set 	<= set_value_in;
 		end if;
@@ -271,16 +311,24 @@ begin
 	decode_register: process(clk_del)
 	begin
 		if rising_edge(clk_del) then
+			if not hazard_detected then
+				dec_mem_store <= ctrl_mem_store;
+				dec_wb_load <= load;
+				dec_rdata_wrt <= ctrl_reg_write;
+				dec_alu_op <= alu_op;
+			else
+				dec_mem_store <= '0';
+				dec_wb_load <= '0';
+				dec_rdata_wrt <= '0';
+				dec_alu_op <= "0000";
+			end if;
+
 			dec_x_out <= x_alu_in;
 			dec_y_out <= ry_out_to_mux;
 			dec_imm_set <= fetch_imm_set;
-			dec_alu_op <= alu_op;
 			
 			dec_imm_ctrl <= imm;
-			dec_mem_store <= ctrl_mem_store;
-			dec_wb_load <= load;
 			dec_rdata_addr <= fetch_inst(26 downto 23);
-			dec_rdata_wrt <= ctrl_reg_write;
 		end if;
 	end process decode_register;
 	
