@@ -26,10 +26,11 @@ int main(void)
 	/*
 	type 1 -- double operand ALU
 	type 2 -- single operand ALU
-	type 3 -- load, store, move
+	type 3 -- load
 	type 4 -- branching
 	type 5 -- halt or no operation
 	type 6 -- fp set
+	type 7 -- store
 	*/
 	
 	//binary inputs
@@ -54,7 +55,7 @@ int main(void)
 	ofstream outFile;
 	
 	//opens the file
-	inFile.open("input2.txt");
+	inFile.open("Test.txt");
 	outFile.open("output.txt");
 
 	//makes sure that the file opened properly
@@ -86,9 +87,9 @@ int main(void)
 		else if(instruction=="Load")
 			{opcode="00010";type=3;}
 		else if(instruction=="Store")
-			{opcode="00011";type=3;}
+			{opcode="00011";type=7;}
 		else if(instruction=="Move")
-			{opcode="00100";type=3;}
+			{opcode="00100";type=2;}
 		else if(instruction=="Fadd")
 			{opcode="00101";type=1;}
 		else if(instruction=="Fsub")
@@ -139,7 +140,7 @@ int main(void)
 				{
 					int number2;
 					int offset=0;
-					string sub=data.substr(data.find("r")+1);
+					string sub=data.substr(data.find("R")+1);
 					if(sub[1]==',')
 					{
 						r1=sub[0];
@@ -152,7 +153,7 @@ int main(void)
 					number2 = stringToInt(r1);
 					bitset<4> r1(number2);
 					
-					sub=data.substr(data.find("r")+1);
+					sub=data.substr(data.find("R")+1);
 					sub=sub.substr(4+offset);
 					if(sub[1]==',')
 						r2=sub[0];
@@ -164,7 +165,7 @@ int main(void)
 					number2 = stringToInt(r2);
 					bitset<4> r2(number2);
 					
-					sub=data.substr(data.find("r")+1);
+					sub=data.substr(data.find("R")+1);
 					sub=sub.substr(8+offset);
 					if(sub[1]==',')
 						r3=sub[0];
@@ -183,7 +184,7 @@ int main(void)
 				{
 					int number2;
 					int offset=0;
-					string sub=data.substr(data.find("r")+1);
+					string sub=data.substr(data.find("R")+1);
 					if(sub[1]==',')
 					{
 						r1=sub[0];
@@ -196,7 +197,7 @@ int main(void)
 					number2 = stringToInt(r1);
 					bitset<4> r1(number2);
 					
-					sub=data.substr(data.find("r")+1);
+					sub=data.substr(data.find("R")+1);
 					sub=sub.substr(4+offset);
 					if(sub[1]==',')
 						r2=sub[0];
@@ -212,11 +213,11 @@ int main(void)
 					outFile<<opcode<<r1<<r2<<"0000000000000000000"<<endl;
 				}
 			break;
-			case 3://load, store, move
+			case 3://load
 				{
 					int number2;
 					int offset=0;
-					string sub=data.substr(data.find("r")+1);
+					string sub=data.substr(data.find("R")+1);
 					if(sub[1]==',')
 					{
 						r1=sub[0];
@@ -229,7 +230,7 @@ int main(void)
 					number2 = stringToInt(r1);
 					bitset<4> r1(number2);
 					
-					sub=data.substr(data.find("r")+1);
+					sub=data.substr(data.find("R")+1);
 					sub=sub.substr(4+offset);
 					if(sub[1]==',')
 						r2=sub[0];
@@ -241,8 +242,41 @@ int main(void)
 					number2 = stringToInt(r2);
 					bitset<4> r2(number2);
 					
-					cout<<opcode<<r1<<r2<<"0000000000000000000"<<endl;
-					outFile<<opcode<<r1<<r2<<"0000000000000000000"<<endl;
+					cout<<opcode<<r1<<"0000"<<r2<<"000000000000000"<<endl;
+					outFile<<opcode<<r1<<"0000"<<r2<<"000000000000000"<<endl;
+				}
+			break;
+			case 7://store
+				{
+					int number2;
+					int offset=0;
+					string sub=data.substr(data.find("R")+1);
+					if(sub[1]==',')
+					{
+						r1=sub[0];
+					}
+					else
+					{
+						r1=sub.substr(0,2);
+						offset=1;
+					}
+					number2 = stringToInt(r1);
+					bitset<4> r1(number2);
+					
+					sub=data.substr(data.find("R")+1);
+					sub=sub.substr(4+offset);
+					if(sub[1]==',')
+						r2=sub[0];
+					else
+					{
+						r2=sub.substr(0,2);
+						offset=offset+1;
+					}
+					number2 = stringToInt(r2);
+					bitset<4> r2(number2);
+					
+					cout<<opcode<<"0000"<<r2<<r1<<"000000000000000"<<endl;
+					outFile<<opcode<<"0000"<<r2<<r1<<"000000000000000"<<endl;
 				}
 			break;
 			case 4://branching
@@ -253,9 +287,18 @@ int main(void)
 					bitset<4> r1Register(number2); //binary converter of register
 					string tin = sub.substr(sub.find("<")+1); //separates beginning of the label
 					string bas = tin.substr(0, tin.length()-1); //cuts off the > from the label
-					bitset<23> r2Register(labels[bas]); //binary converter of the label from table
-				    cout<<opcode<<r1Register<<r2Register<<endl;
-				    outFile<<opcode<<r1Register<<r2Register<<endl;
+				    if(instruction=="B")
+				    {
+				    	bitset<15> r2Register(labels[bas]); //binary converter of the label from table
+				    	cout<<opcode<<"000000000000"<<r2Register<<endl;
+				    	outFile<<opcode<<"000000000000"<<r2Register<<endl;
+					}
+					else
+					{
+						bitset<19> r2Register(labels[bas]); //binary converter of the label from table
+						cout<<opcode<<"0000"<<r1Register<<r2Register<<endl;
+				    	outFile<<opcode<<"0000"<<r1Register<<r2Register<<endl;	
+					}
 				}
 			break;
 			case 5: //halt or no operation
@@ -271,12 +314,24 @@ int main(void)
 			case 6: //fp set ***uses 2 lines, one for instruction, one for 32-bit fp number
 				{
 					r1=data.substr(data.find("#")+1,data.length()-1);
-					r1Register="0000";
+					int number2;
+					string sub=data.substr(data.find("R")+1);
+					if(sub[1]==',')
+					{
+						r2=sub[0];
+					}
+					else
+					{
+						r2=sub.substr(0,2);
+					}
+					number2 = stringToInt(r2);
+					bitset<4> r2(number2);
 					r2Register="0000";
 					r3Register="0000";
 					immediateBits="000000000000000";
-				    cout<<opcode<<r1Register<<r2Register<<r3Register<<immediateBits<<endl;
-				    outFile<<opcode<<r1Register<<r2Register<<r3Register<<immediateBits<<endl;
+				    cout<<opcode<<r2<<r2Register<<r3Register<<immediateBits<<endl;
+				    outFile<<opcode<<r2<<r2Register<<r3Register<<immediateBits<<endl;
+				    
 					float number=atof(r1.c_str());
 					union
   					{

@@ -11,7 +11,7 @@ entity alu is
 	func:	in	std_logic_vector(3 downto 0);
 	outp:	out	std_logic_vector(31 downto 0);
 	neg:	out	std_ulogic;
-	zero: out std_ulogic
+	zero: 	out 	std_ulogic
 	);
 end alu;
 
@@ -28,51 +28,84 @@ architecture behave of alu is
 
 	signal mux_out: std_logic_vector(31 downto 0);
 begin
-	M1: mux_16_to_1 port map (in0  => out0, 
-														in1  => out1,
-														in2  => out2,
-														in3  => out3,
-														in4  => out4,
-														in5  => out5,
-														in6  => out6,
-														in7  => out7,
-														in8  => out8,
-														in9  => out9,
-														in10 => out10,
-														in11 => out11,
-														in12 => out12,
-														in13 => out13,
-														in14 => out14,
-														in15 => out15,
-														sel  => func,
-														o 	 => outp);
-	process(A, B, func) begin	
-
+	M1: mux_16_to_1 port map (	in0  => out0, 
+					in1  => out1,
+					in2  => out2,
+					in3  => out3,
+					in4  => out4,
+					in5  => out5,
+					in6  => out6,
+					in7  => out7,
+					in8  => out8,
+					in9  => out9,
+					in10 => out10,
+					in11 => out11,
+					in12 => out12,
+					in13 => out13,
+					in14 => out14,
+					in15 => out15,
+					sel  => func,
+					o    => outp);
+	process(A, B, func) 
+		variable ceil_mask: std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
+		variable zero_vec: std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
+		variable exp_places: integer;
+	begin	
 		out0  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (FADD)
 		out1  <= to_std_logic_vector(to_float(A) - to_float(B)); --not implemented (FSUB)
-		out2  <= to_std_logic_vector(to_float(A) * to_float(B)); --not implemented (FMULT)
-		out3  <= to_std_logic_vector(to_float(A) / to_float(B)); --not implemented (FDIV)
-		out4  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (MIN)
-		out5  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (MAX)
-		out6  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (POW)
-		out7  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (NEG)
-		out8  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (FLOOR)
-		out9  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (CEIL)
-		out10 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (ROUND)
-		out11 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (ABS)
-		out12 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (EXP)
-		out13 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (SQRT)
-		out14 <= A; --not implemented (PASS A)
-		out15 <= B; --not implemented (PASS B)
+		out2  <= to_std_logic_vector(to_float(A) * to_float(B));
+		out3  <= to_std_logic_vector(to_float(A) / to_float(B));
 
-		if outp(31) = '1' then
-			neg <= '1';
-		elsif outp(31) = '0' then
-			neg <= '0';
+		--out4  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (MIN)
+		if to_float(A) > to_float(B) then
+			out4 <= B;
+			out5 <= A;
 		else
-			neg <= 'X';
+			out4 <= A;
+			out5 <= B;
+		end if;
+		
+		--out5  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (MAX)
+		out6  <= '1' & A(30 downto 0); --(NEG)
+
+		--out8 (FLOOR)
+		--out9 (CEIL)
+		if (to_integer(unsigned(A(30 downto 23))) - 127) >= 0 then
+			exp_places := 32 - (( to_integer(unsigned(A(30 downto 23))) - 127) + 9);
+			ceil_mask(31 downto exp_places) := A(31 downto exp_places);
+			if A(31) = '0' then
+				out8 <= to_std_logic_vector(to_float(ceil_mask) + 1);
+				out7 <= to_std_logic_vector(to_float(ceil_mask));
+			else
+				out7 <= to_std_logic_vector(to_float(ceil_mask) - 1);
+				out8 <= to_std_logic_vector(to_float(ceil_mask));
+			end if;
+		else
+			if A(31) = '0' then
+				out8 <= "00000000000000000000000000000001";
+				out7 <= zero_vec;
+			else
+				out8 <= zero_vec;
+				out7 <= "10000000000000000000000000000001";
+			end if;
 		end if;
 
-		zero <= 'X';
+
+		out9 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (ROUND)
+		--out10 <= std_logic_vector(unsigned(float32(to_float(A)))); --not implemented (ROUND)
+		out10 <= '0' & A(30 downto 0); --(ABS)
+		out11 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (EXP)
+		out12 <= to_std_logic_vector(sqrt(to_float(A)));
+		out13  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (POW)
+		out14 <= A;
+		out15 <= B;
+
+		if outp(30 downto 23) = "00000000" then
+			zero <= '1';
+		else
+			zero <= '0';
+		end if;
 	end process;
+
+	neg <= outp(31);
 end behave;

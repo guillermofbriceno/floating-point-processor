@@ -10,7 +10,8 @@ end mux_16_to_1;
 
 architecture behave of mux_16_to_1 is
 begin
-process(in0, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13, in14, in15) is begin
+	mux: process(all) is 
+	begin
 		case sel is
 			when "0000" => o <= in0;
 			when "0001" => o <= in1;
@@ -28,8 +29,8 @@ process(in0, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in11, in12, in13
 			when "1101" => o <= in13;
 			when "1110" => o <= in14;
 			when "1111" => o <= in15;
-			when others => o <= (others => 'X');
+			when others => o <= (others => '0');
 		end case;
-	end process;
+	end process mux;
 end behave;
 
