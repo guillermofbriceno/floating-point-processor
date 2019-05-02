@@ -71,8 +71,3 @@ begin
 
 	end process;
 end test;
-
-
-
-
-

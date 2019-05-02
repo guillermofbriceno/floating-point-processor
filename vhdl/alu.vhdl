@@ -26,6 +26,9 @@ architecture behave of alu is
 
 	signal out0, out1, out2, out3, out4, out5, out6, out7, out8, out9, out10, out11, out12, out13, out14, out15: std_logic_vector(31 downto 0);
 
+	signal sub_func: std_logic;
+	signal fadd_out: std_logic_vector(31 downto 0);
+
 	signal mux_out: std_logic_vector(31 downto 0);
 begin
 	M1: mux_16_to_1 port map (	in0  => out0, 
@@ -46,13 +49,18 @@ begin
 					in15 => out15,
 					sel  => func,
 					o    => outp);
+
 	process(A, B, func) 
 		variable ceil_mask: std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
 		variable zero_vec: std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
 		variable exp_places: integer;
+
+		variable exp_accumulated: float32;
 	begin	
+
 		out0  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (FADD)
 		out1  <= to_std_logic_vector(to_float(A) - to_float(B)); --not implemented (FSUB)
+
 		out2  <= to_std_logic_vector(to_float(A) * to_float(B));
 		out3  <= to_std_logic_vector(to_float(A) / to_float(B));
 
@@ -92,11 +100,26 @@ begin
 
 
 		out9 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (ROUND)
-		--out10 <= std_logic_vector(unsigned(float32(to_float(A)))); --not implemented (ROUND)
+
+
 		out10 <= '0' & A(30 downto 0); --(ABS)
 		out11 <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (EXP)
 		out12 <= to_std_logic_vector(sqrt(to_float(A)));
 		out13  <= to_std_logic_vector(to_float(A) + to_float(B)); --not implemented (POW)
+		--if to_integer(unsigned(B)) < 128 then
+		--	if to_integer(unsigned(B)) = 0 then
+		--		out13 <= to_std_logic_vector(0);
+		--	else
+		--		exp_accumulated := to_float(A);
+		--		for i in o to to_integer(unsigned(B)) loop
+		--			exp_accumulated := exp_accumulated * exp_accumulated;
+		--		end loop;
+		--		out13 <= to_std_logic_vector(exp_accumulated);
+		--	end if;
+
+		--end if;
+		--for 
+		
 		out14 <= A;
 		out15 <= B;
 
